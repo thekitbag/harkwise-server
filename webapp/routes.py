@@ -2,7 +2,7 @@ from flask import jsonify, request
 import logging
 
 from webapp import app, db
-from webapp.models import Establishment, Rating
+from webapp.models import Establishment, Rating, Interest
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -46,11 +46,26 @@ def review():
 @app.route('/api/interest', methods=['POST'])
 def capture_interest():
     data = request.json
+
+    if not data:
+        logging.error("Received empty request data")
+        return jsonify(error="Invalid data"), 400
+
     name = data.get('name')
     email = data.get('email')
-    
-    print(name, email)
-    
-    # Handle data as needed, like storing it in a database
-    
+
+    if not name or not email:
+        logging.error("Received incomplete data for capturing interest")
+        return jsonify(error="Incomplete data. 'name' and 'email' are required."), 400
+
+    existing_interest = Interest.query.filter_by(email=email).first()
+    if existing_interest:
+        logging.warning(f"Duplicate entry attempt for email: {email}")
+        return jsonify(error="Email already registered"), 409
+
+    interest = Interest(name=name, email=email)
+    db.session.add(interest)
+    db.session.commit()
+
+    logging.info(f"Captured interest for name: {name}, email: {email}")
     return jsonify(status='success'), 200
