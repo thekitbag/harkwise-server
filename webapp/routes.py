@@ -9,7 +9,9 @@ logging.basicConfig(level=logging.DEBUG)
 @app.route('/api/get_establishment_details/<int:establishment_id>', methods=['GET'])
 def get_establishment_details(establishment_id):
     """Retrieve establishment details by its ID."""
+    print("request:", request.json)
     establishment = Establishment.query.get(establishment_id)
+    print("establishment:", establishment)
     if establishment:
         return jsonify({'name': establishment.name})
     else:
@@ -40,3 +42,15 @@ def review():
 
     logging.info(f"Review added for Establishment ID {establishment_id}")
     return jsonify({'message': 'Review Received'})
+
+@app.route('/api/interest', methods=['POST'])
+def capture_interest():
+    data = request.json
+    name = data.get('name')
+    email = data.get('email')
+    
+    print(name, email)
+    
+    # Handle data as needed, like storing it in a database
+    
+    return jsonify(status='success'), 200
