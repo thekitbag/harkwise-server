@@ -16,6 +16,8 @@ Flask-SQLAlchemy==2.5.1
 Flask-WTF==1.0.0
 greenlet==1.1.1
 gunicorn==21.2.0
+hubspot==0.1.14.dev0
+hubspot-api-client==8.1.1
 idna==3.3
 inflection==0.5.1
 iniconfig==1.1.1
