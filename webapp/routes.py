@@ -21,7 +21,8 @@ def get_establishment_details(establishment_id):
         return jsonify({
             'name': establishment.name,
             'publicReviewSites': establishment.publicReviewSites,
-            'captureEmail': bool(establishment.capture_email)
+            'captureEmail': bool(establishment.capture_email),
+            'logoURL': establishment.logo_url
         })
     else:
         logging.warning(f"Establishment ID {establishment_id} not found")

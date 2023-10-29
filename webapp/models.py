@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import JSON
 
 class CapturedEmail(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True, nullable=False)
+    email = db.Column(db.String(255), nullable=False)
     establishment_id = db.Column(db.Integer, db.ForeignKey('establishment.id'))
     captured_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -20,6 +20,7 @@ class Establishment(db.Model):
     emails = db.relationship('CapturedEmail', backref='establishment', lazy='dynamic')
     publicReviewSites = db.Column(JSON)
     capture_email = db.Column(db.Boolean, default=False)
+    logo_url = db.Column(db.String(512))
 
     def __repr__(self):
         return f'<Establishment {self.id}>'
