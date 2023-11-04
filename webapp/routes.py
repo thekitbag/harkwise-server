@@ -29,30 +29,35 @@ def get_establishment_details(establishment_id):
         return jsonify({'error': 'Establishment not found'}), 404
 
 
+from flask import request, jsonify
+
 @app.route('/api/review', methods=["POST"])
 def review():
     """Save a review for an establishment."""
     data = request.json
+
     try:
         establishment_id = data['establishmentId']
         rating = data['rating']
         comment = data['comment']
+        method = data['reviewMethod']
     except KeyError as e:
         logging.error(f"Missing field in request data: {e}")
         return jsonify({'error': f"Missing field: {e}"}), 400
-    
+
     establishment = Establishment.query.get(establishment_id)
     if not establishment:
         logging.error(f"Establishment ID {establishment_id} not found when adding review")
         return jsonify({'error': 'Establishment not found for the given review'}), 404
 
-    r = Rating(rating=rating, comment=comment)
+    r = Rating(rating=rating, comment=comment, method=method)
     establishment.ratings.append(r)
     db.session.add_all([establishment, r])
     db.session.commit()
 
-    logging.info(f"Review added for Establishment ID {establishment_id}")
+    logging.info(f"Review added for Establishment ID {establishment_id} with method {method}")
     return jsonify({'message': 'Review Received'})
+
 
 @app.route('/api/interest', methods=['POST'])
 def capture_interest():

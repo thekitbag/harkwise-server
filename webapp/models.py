@@ -30,7 +30,8 @@ class Rating(db.Model):
     rating = db.Column(db.Integer)
     comment = db.Column(db.String(160))
     establishment_id = db.Column(db.Integer, db.ForeignKey('establishment.id'))
-    timestamp = db.Column(DateTime, default=datetime.utcnow)  # New column for timestamp
+    timestamp = db.Column(DateTime, default=datetime.utcnow)
+    method = db.Column(db.String(80))
 
 
     def __repr__(self):
